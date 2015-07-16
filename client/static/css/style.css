@@ -1,3 +1,5 @@
 score {
 	visibility: hidden;
 }
+
+.ng-cloak { display:none; }
