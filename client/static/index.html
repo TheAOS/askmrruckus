@@ -18,7 +18,7 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container" data-ng-controller="AppCtrl">
+	<div class="container" data-ng-controller="AppCtrl" class="ng-cloak">
 		<div class="row">
 			<div class="col-sm-6 col-md-4">
 				<form name="characterForm">
@@ -32,7 +32,7 @@
 					<button data-ng-disabled="characterForm.$invalid || !enabled" data-ng-click="optimize(character)" class="btn btn-primary">Optimera!</button>
 				</form>
 			</div>
-			<div class="ng-cloak" data-ng-show="optimized" class="col-sm-6" class="col-md-8">
+			<div data-ng-show="optimized" class="col-sm-6" class="col-md-8">
 				<h3>
 					Optimeringar för <span data-ng-bind="optimized.name"></span>!
 				</h3>
@@ -46,7 +46,7 @@
 				<progressbar type="{{ optimized.type }}" value="optimized.value" class="progress-striped active"></progressbar>
 			</div>
 		</div>
-		<div class="row ng-cloak">
+		<div class="row">
 			<div class="col-sm-6">
 				<h3>Highscores</h3>
 				<scorelist scores="scores.highscore"></scorelist>
