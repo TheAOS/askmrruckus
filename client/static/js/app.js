@@ -79,11 +79,13 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
 	
 	// Optimize function
 	$scope.optimize = function(character){
-		$scope.enabled = false;
-		OptimizeService.optimize.save(character).$promise.then(function(response){
-			$scope.optimized = response.data;
-			$scope.optimized.type = getType($scope.optimized.value);
-		});
+		if ($scope.enabled) {
+			$scope.enabled = false;
+			OptimizeService.optimize.save(character).$promise.then(function(response){
+				$scope.optimized = response.data;
+				$scope.optimized.type = getType($scope.optimized.value);
+			});
+		}
 	};
 }).directive('scorelist', function(){
 	return {
