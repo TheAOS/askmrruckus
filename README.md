@@ -4,6 +4,10 @@ Parody of Ask Mr. Robot
 ## Upcoming features
 - Load actual characters from WoW API
 
+## Prerequisites
+- node.js
+- mongodb
+
 ## Installation
 Clone the git repo:
 
