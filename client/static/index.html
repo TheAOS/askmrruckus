@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html data-ng-app="ruckus">
+<head>
+<title>Ask Mr. Ruckus</title>
+<link rel="stylesheet" type="text/css"
+	href="static/external/css/bootstrap-3.3.4.css">
+<link rel="stylesheet" type="text/css"
+	href="static/css/style.css">
+<link rel="stylesheet" type="text/css"
+	href="static/css/animations.css">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<span class="navbar-brand" href="#">Ask Mr. Ruckus</span>
+			</div>
+		</div>
+	</nav>
+	<div class="container" data-ng-controller="AppCtrl">
+		<div class="row">
+			<div class="col-sm-6 col-md-4">
+				<form name="characterForm">
+					<div class="form-group">
+						<label>Karaktärsnamn:
+							<span class="text-danger" data-ng-show="characterForm.name.$error.minlength">(för kort)</span>
+						</label>
+						<input type="text" data-ng-minlength="3" data-ng-required="true" name="name"
+							data-ng-model="character.name" class="form-control" autocomplete="off" autofocus="autofocus">
+					</div>
+					<button data-ng-disabled="characterForm.$invalid || !enabled" data-ng-click="optimize(character)" class="btn btn-primary">Optimera!</button>
+				</form>
+			</div>
+			<div data-ng-show="optimized" class="col-sm-6" class="col-md-8">
+				<h3>
+					Optimeringar för <span data-ng-bind="optimized.name"></span>!
+				</h3>
+				<p>
+					<span data-ng-bind="optimized.actualPresses"></span> av
+					<span data-ng-bind="optimized.possiblePresses"></span> möjliga knappar tryckta.
+				</p>
+				<p>
+					<span data-ng-bind="(optimized.value | number: 3) + '%'"></span> optimalt.
+				</p>
+				<progressbar type="{{ optimized.type }}" value="optimized.value" class="progress-striped active"></progressbar>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<h3>Highscores</h3>
+				<scorelist scores="scores.highscore"></scorelist>
+			</div>
+			<div class="col-sm-6">
+				<h3>Lowscores</h3>
+				<scorelist scores="scores.lowscore"></scorelist>
+			</div>
+		</div>
+	</div>
+	<script src="static/external/js/angular-1.4.3.js"></script>
+	<script src="static/external/js/angular-resource-1.4.3.js"></script>
+	<script src="static/external/js/angular-animate-1.4.3.js"></script>
+	<script src="static/external/js/ui-bootstrap-tpls-0.13.0.js"></script>
+	<script src="static/js/app.js"></script>
+</body>
+</html>
