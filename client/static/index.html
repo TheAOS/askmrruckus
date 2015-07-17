@@ -50,7 +50,10 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h3>
-							{{ strings.OPTIMIZATIONS_FOR }} <span data-ng-bind="loadedCharacter.name + ' @ ' + loadedCharacter.realm"></span>
+							{{ strings.OPTIMIZATIONS_FOR }}
+							<span class="{{ classCss }}" data-ng-bind="loadedCharacter.name"></span>
+							@
+							<span data-ng-bind="loadedCharacter.realm"></span>
 						</h3>
 						<div data-ng-show="optimized">
 							<p>

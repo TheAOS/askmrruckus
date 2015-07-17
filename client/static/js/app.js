@@ -89,6 +89,7 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
 					$scope.errorMsg = response.data.reason;
 				} else {
 					$scope.loadedCharacter = response.data;
+					$scope.classCss = classDict[response.data.class];
 					$scope.optimize($scope.loadedCharacter, true);
 					$scope.errorMsg = null;
 				}
