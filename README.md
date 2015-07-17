@@ -1,9 +1,6 @@
 # askmrruckus
 Parody of Ask Mr. Robot
 
-## Upcoming features
-- Load actual characters from WoW API
-
 ## Prerequisites
 - node.js
 - mongodb
@@ -21,4 +18,6 @@ Copy example config:
 
     cp config.json.example config.json
 
-Then edit the config with your desired values.
+Then edit the config with your desired values. Then launch with
+
+    node index.js
