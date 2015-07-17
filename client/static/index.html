@@ -9,8 +9,10 @@
 	href="static/css/style.css">
 <link rel="stylesheet" type="text/css"
 	href="static/css/animations.css">
+<link rel="stylesheet" type="text/css"
+	href="static/css/classes.css">
 </head>
-<body>
+<body data-ng-controller="SiteCtrl">
 	<nav class="navbar navbar-default">
 		<div class="container">
 			<div class="navbar-header">
@@ -18,42 +20,74 @@
 			</div>
 		</div>
 	</nav>
-	<div class="container ng-cloak" data-ng-controller="AppCtrl">
-		<div class="row">
-			<div class="col-sm-6 col-md-4">
-				<form name="characterForm">
-					<div class="form-group">
-						<label>Karaktärsnamn:
-							<span class="text-danger" data-ng-show="characterForm.name.$error.minlength">(för kort)</span>
-						</label>
-						<input type="text" data-ng-minlength="3" data-ng-required="true" name="name"
-							data-ng-model="character.name" class="form-control" autocomplete="off" autofocus="autofocus">
+	<div class="container ng-cloak">
+		<div class="row" data-ng-controller="OptimizeCtrl">
+			<div data-ng-show="!loadedCharacter" class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<form name="characterForm">
+							<div class="form-group">
+								<label>{{ strings.CHARACTER_NAME }}:
+									<span class="text-danger" data-ng-show="characterForm.name.$error.minlength">({{ strings.TOO_SHORT }})</span>
+								</label>
+								<input type="text" data-ng-minlength="3" data-ng-required="true" name="name"
+									data-ng-model="character.name" class="form-control" autocomplete="off" autofocus="autofocus">
+							</div>
+							<div class="form-group">
+								<label>{{ strings.SERVER_NAME }}:
+									<span class="text-danger" data-ng-show="characterForm.realm.$error.minlength">({{ strings.TOO_SHORT }})</span>
+								</label>
+								<input type="text" data-ng-minlength="3" data-ng-required="true" name="realm"
+									data-ng-model="character.realm" class="form-control" autocomplete="off" autofocus="autofocus">
+							</div>
+							<button data-ng-disabled="characterForm.$invalid || !retrieveEnabled" data-ng-click="retrieve(character)" class="btn btn-primary">{{ strings.LOAD }}</button>
+							<span class="text-danger" data-ng-bind="errorMsg"></span>
+						</form>
 					</div>
-					<button data-ng-disabled="characterForm.$invalid || !enabled" data-ng-click="optimize(character)" class="btn btn-primary">Optimera!</button>
-				</form>
+				</div>
 			</div>
-			<div data-ng-show="optimized" class="col-sm-6 col-md-8">
-				<h3>
-					Optimeringar för <span data-ng-bind="optimized.name"></span>!
-				</h3>
-				<p>
-					<span data-ng-bind="optimized.actualPresses"></span> av
-					<span data-ng-bind="optimized.possiblePresses"></span> möjliga knappar tryckta.
-				</p>
-				<p>
-					<span data-ng-bind="(optimized.value | number: 3) + '%'"></span> optimalt.
-				</p>
-				<progressbar type="{{ optimized.type }}" value="optimized.value" class="progress-striped active"></progressbar>
+			<div data-ng-show="loadedCharacter" class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h3>
+							{{ strings.OPTIMIZATIONS_FOR }} <span data-ng-bind="loadedCharacter.name + ' @ ' + loadedCharacter.realm"></span>
+						</h3>
+						<div data-ng-show="optimized">
+							<p>
+								<span data-ng-bind="optimized.actualPresses"></span> {{ strings.OUT_OF }}
+								<span data-ng-bind="optimized.possiblePresses"></span> {{ strings.POSSIBLE_BUTTONS_PRESSED }}.
+							</p>
+							<p>
+								<span data-ng-bind="(optimized.value | number: 3) + '%'"></span> {{ strings.OPTIMAL }}.
+							</p>
+							<progressbar type="info" value="optimized.value" class="progress-striped active"></progressbar>
+						</div>
+						<button data-ng-disabled="!optimizeEnabled" data-ng-click="optimize(loadedCharacter)" class="btn btn-primary">{{ strings.REOPTIMIZE }}</button>
+						<button data-ng-disabled="!optimizeEnabled" data-ng-click="reset()" class="btn btn-primary">{{ strings.RESET }}</button>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row" data-ng-controller="ScoreCtrl">
 			<div class="col-sm-6">
-				<h3>Highscores</h3>
-				<scorelist scores="scores.highscore"></scorelist>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						{{ strings.HIGHSCORES }}
+					</div>
+					<div class="panel-body">
+						<scorelist scores="scores.highscore"></scorelist>
+					</div>
+				</div>
 			</div>
 			<div class="col-sm-6">
-				<h3>Lowscores</h3>
-				<scorelist scores="scores.lowscore"></scorelist>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						{{ strings.LOWSCORES }}
+					</div>
+					<div class="panel-body">
+						<scorelist scores="scores.lowscore"></scorelist>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -61,6 +95,7 @@
 	<script src="static/external/js/angular-resource-1.4.3.js"></script>
 	<script src="static/external/js/angular-animate-1.4.3.js"></script>
 	<script src="static/external/js/ui-bootstrap-tpls-0.13.0.js"></script>
+	<script src="js/strings.js"></script>
 	<script src="static/js/app.js"></script>
 </body>
 </html>

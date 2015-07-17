@@ -1,5 +1,9 @@
 <div class="score fadeIn">
-	<span class="score-percent" data-ng-bind="(score.value | number: 3) + '% - ' + score.name"></span>
+	<span class="score-percent" data-ng-bind="(score.value | number: 3)"></span>
+	% -
+	<span class="score-name {{ score.classCss }}" data-ng-bind="score.name"></span>
+	@
+	<span class="score-realm" data-ng-bind="score.realm"></span>
 	<span class="score-presses pull-right" data-ng-bind="score.actualPresses + ' / ' + score.possiblePresses"></span>
 	<progressbar type="{{ score.type }}" value="score.value" class="progress active"></progressbar>
 </div>
