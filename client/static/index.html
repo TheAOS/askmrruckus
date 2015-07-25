@@ -70,22 +70,48 @@
 					</div>
 				</div>
 			</div>
+			<div data-ng-controller="ClickCtrl" class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span data-ng-bind="strings.CLICKSCORES"></span>
+					</div>
+					<div class="panel-body">
+						<div class="clicks">
+							<div data-ng-repeat="click in clicks" class="row click">
+								<div class="col-xs-9">
+									<span class="{{ click.classCss }}" data-ng-bind="click._id.name"></span>
+									@
+									<span data-ng-bind="click._id.realm"></span>
+								</div>
+								<div class="col-xs-3">
+									<span data-ng-bind="click.count"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<span data-ng-bind="strings.TOTAL_CLICKS"></span>
+						:
+						<span data-ng-bind="totalClicks"></span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="row" data-ng-controller="ScoreCtrl">
 			<div class="col-sm-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						{{ strings.HIGHSCORES }}
+						<span data-ng-bind="strings.HIGHSCORES"></span>
 					</div>
 					<div class="panel-body">
-						<scorelist scores="scores.highscore"></scorelist>
+						<span><scorelist scores="scores.highscore"></scorelist>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						{{ strings.LOWSCORES }}
+						<span data-ng-bind="strings.LOWSCORES"></span>
 					</div>
 					<div class="panel-body">
 						<scorelist scores="scores.lowscore"></scorelist>

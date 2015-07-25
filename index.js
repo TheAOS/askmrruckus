@@ -6,6 +6,17 @@ var jsonfile = require('jsonfile');
 var Request = require('request');
 
 var highscore = db.get('highscore');
+
+// Monkey patch for aggregates in monk courtesy of https://github.com/oO
+// https://github.com/Automattic/monk/issues/56
+highscore.aggregate = function(aggregation){
+    var collection = this.col;
+    var options = {};
+    return function (callback){
+        return collection.aggregate(aggregation, options, callback)
+    }
+}
+
 var characterCache = db.get('characterCache');
 var server = new Hapi.Server();
 
@@ -159,6 +170,43 @@ server.route({
 				}
 			});
 		}, console.error);
+	}
+});
+
+server.route({
+	method : 'GET',
+	path : '/api/clicks',
+	handler : function(request, reply) {
+		highscore.aggregate([{
+			$group: {
+				_id: { name: "$name", class: "$class", realm: "$realm" },
+				count: { $sum: 1 }
+			}
+		},{
+			$sort: {
+				count: -1
+			}
+		},{
+			$limit : 5
+		}])(function(err, docs){
+			highscore.aggregate([{
+				$group: {
+					_id: null,
+					count: { $sum: 1 }
+				}
+			}])(function(err2, docs2){
+				var count = 0;
+				if (docs2.length > 0) {
+					count = docs2[0].count;
+				}
+				reply({
+					data: {
+						clicks: docs,
+						totalClicks: count
+					}
+				})
+			});
+		});
 	}
 });
 

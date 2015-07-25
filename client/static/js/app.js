@@ -31,6 +31,12 @@ function handleScores(scores) {
 	}
 }
 
+function handleClicks(clicks) {
+	for(var i = 0; i < clicks.length; i++){
+		clicks[i].classCss = classDict[clicks[i]._id.class];
+	}
+}
+
 function updateScores(oldScores, newScores) {
 	// Handle empty oldScores
 	if (oldScores.length == 0) {
@@ -59,10 +65,25 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
 		siteprefs: $resource('/api/siteprefs'),
 		optimize: $resource('/api/optimize'),
 		retrieve: $resource('/api/retrieve'),
-		highscore: $resource('/api/highscore')
+		highscore: $resource('/api/highscore'),
+		clicks: $resource('/api/clicks')
 	}
 }).controller('SiteCtrl', function($scope, ApiService){
 	$scope.strings = strings;
+}).controller('ClickCtrl', function($scope, ApiService){
+	// Init clicks
+	ApiService.clicks.get().$promise.then(function(response){
+		$scope.clicks = response.data.clicks;
+		$scope.totalClicks= response.data.totalClicks;
+		handleClicks($scope.clicks);
+		setInterval(function(){
+			ApiService.clicks.get().$promise.then(function(response){
+				$scope.clicks = response.data.clicks;
+				$scope.totalClicks = response.data.totalClicks;
+				handleClicks($scope.clicks);
+			});
+		}, 1000);
+	});
 }).controller('ScoreCtrl', function($scope, ApiService){
 	// Init scores
 	ApiService.highscore.get().$promise.then(function(response){

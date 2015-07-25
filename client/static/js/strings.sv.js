@@ -12,5 +12,7 @@ var strings = {
 		LOAD_CHARACTER: 'Ladda karaktär',
 		LOAD_TO_OPTIMIZE: 'Ladda en karaktär för att optimera!',
 		LOAD: 'Ladda!',
-		RESET: 'Nollställ'
+		RESET: 'Nollställ',
+		TOTAL_CLICKS: 'Totalt antal klick',
+		CLICKSCORES: 'Toppklickare'
 }
