@@ -148,6 +148,7 @@ server.route({
 		character.possiblePresses = getRandomInt(10000, 100000);
 		character.actualPresses = getRandomInt(0, character.possiblePresses + 1);
 		character.value = character.actualPresses/character.possiblePresses * 100;
+		character.date = new Date();
 		
 		highscore.insert(character).then(function(){
 			reply({
