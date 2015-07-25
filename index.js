@@ -188,7 +188,7 @@ server.route({
 				count: -1
 			}
 		},{
-			$limit : 5
+			$limit : 20
 		}])(function(err, docs){
 			highscore.aggregate([{
 				$group: {

@@ -70,7 +70,29 @@
 					</div>
 				</div>
 			</div>
-			<div data-ng-controller="ClickCtrl" class="col-sm-6">
+		</div>
+		<div class="row" data-ng-controller="ScoreCtrl">
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span data-ng-bind="strings.HIGHSCORES"></span>
+					</div>
+					<div class="panel-body">
+						<span><scorelist scores="scores.highscore"></scorelist>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span data-ng-bind="strings.LOWSCORES"></span>
+					</div>
+					<div class="panel-body">
+						<scorelist scores="scores.lowscore"></scorelist>
+					</div>
+				</div>
+			</div>
+			<div data-ng-controller="ClickCtrl" class="col-sm-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<span data-ng-bind="strings.CLICKSCORES"></span>
@@ -93,28 +115,6 @@
 						<span data-ng-bind="strings.TOTAL_CLICKS"></span>
 						:
 						<span data-ng-bind="totalClicks"></span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row" data-ng-controller="ScoreCtrl">
-			<div class="col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span data-ng-bind="strings.HIGHSCORES"></span>
-					</div>
-					<div class="panel-body">
-						<span><scorelist scores="scores.highscore"></scorelist>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span data-ng-bind="strings.LOWSCORES"></span>
-					</div>
-					<div class="panel-body">
-						<scorelist scores="scores.lowscore"></scorelist>
 					</div>
 				</div>
 			</div>
