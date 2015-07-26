@@ -178,6 +178,7 @@ server.route({
 	method : 'GET',
 	path : '/api/clicks',
 	handler : function(request, reply) {
+		// Get count per name
 		highscore.aggregate([{
 			$group: {
 				_id: { name: "$name", class: "$class", realm: "$realm" },
@@ -188,24 +189,53 @@ server.route({
 				count: -1
 			}
 		},{
-			$limit : 20
-		}])(function(err, docs){
+			$limit: 20
+		}])(function(err, countPerName){
+			// Get count all
 			highscore.aggregate([{
 				$group: {
 					_id: null,
 					count: { $sum: 1 }
 				}
-			}])(function(err2, docs2){
+			}])(function(err2, countTotal){
 				var count = 0;
-				if (docs2.length > 0) {
-					count = docs2[0].count;
+				if (countTotal.length > 0) {
+					count = countTotal[0].count;
 				}
-				reply({
-					data: {
-						clicks: docs,
-						totalClicks: count
+				// Get averages per name
+				highscore.aggregate([{
+					$group: {
+						_id: { name: "$name", class: "$class", realm: "$realm" },
+						average: { $avg: "$value" }
 					}
-				})
+				},{
+					$sort: {
+						average: -1
+					}
+				},{
+					$limit: 20
+				}])(function(err3, avgPerName){
+					// Get total average
+					highscore.aggregate([{
+						$group : {
+							_id: null,
+							average: { $avg: "$value" }
+						}
+					}])(function(err4, avgTotal){
+						var average = 0;
+						if (avgTotal.length > 0){
+							average = avgTotal[0].average;
+						}
+						reply({
+							data: {
+								clicks: countPerName,
+								totalClicks: count,
+								averages: avgPerName,
+								totalAverage: average
+							}
+						})
+					});
+				});
 			});
 		});
 	}

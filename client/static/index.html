@@ -93,28 +93,54 @@
 				</div>
 			</div>
 			<div data-ng-controller="ClickCtrl" class="col-sm-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<span data-ng-bind="strings.CLICKSCORES"></span>
-					</div>
-					<div class="panel-body">
-						<div class="clicks">
-							<div data-ng-repeat="click in clicks" class="row click">
-								<div class="col-xs-9">
-									<span class="{{ click.classCss }}" data-ng-bind="click._id.name"></span>
-									@
-									<span data-ng-bind="click._id.realm"></span>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<span data-ng-bind="strings.CLICKSCORES"></span>
+							</div>
+							<div class="panel-body">
+								<div class="clicks">
+									<div data-ng-repeat="click in clicks" class="row click">
+										<div class="col-xs-8">
+											<span class="{{ click.classCss }}" data-ng-bind="click._id.name"></span>-<span data-ng-bind="click._id.realm"></span>
+										</div>
+										<div class="col-xs-4">
+											<span data-ng-bind="click.count"></span>
+										</div>
+									</div>
 								</div>
-								<div class="col-xs-3">
-									<span data-ng-bind="click.count"></span>
-								</div>
+							</div>
+							<div class="panel-footer">
+								<span data-ng-bind="strings.TOTAL_CLICKS"></span>:
+								<span data-ng-bind="totalClicks"></span>
 							</div>
 						</div>
 					</div>
-					<div class="panel-footer">
-						<span data-ng-bind="strings.TOTAL_CLICKS"></span>
-						:
-						<span data-ng-bind="totalClicks"></span>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<span data-ng-bind="strings.TOP_AVERAGES"></span>
+							</div>
+							<div class="panel-body">
+								<div class="clicks">
+									<div data-ng-repeat="average in averages" class="row average">
+										<div class="col-xs-8">
+											<span class="{{ average.classCss }}" data-ng-bind="average._id.name"></span>-<span data-ng-bind="average._id.realm"></span>
+										</div>
+										<div class="col-xs-4">
+											<span data-ng-bind="average.average | number: 3"></span>%
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel-footer">
+								<span data-ng-bind="strings.TOTAL_AVERAGE"></span>:
+								<span data-ng-bind="totalAverage | number: 3"></span>%
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

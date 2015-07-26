@@ -3,3 +3,7 @@ score {
 }
 
 .ng-cloak { display:none; }
+
+.indent {
+	margin-left: 0px;
+}

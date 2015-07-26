@@ -14,5 +14,9 @@ var strings = {
 		LOAD: 'Ladda!',
 		RESET: 'Nollställ',
 		TOTAL_CLICKS: 'Totalt antal klick',
-		CLICKSCORES: 'Toppklickare'
+		CLICKSCORES: 'Toppklickare',
+		AVG_CLICK_VALUE: 'Medel',
+		CLICKS: 'Klick',
+		TOTAL_AVERAGE: 'Totalt medevärde',
+		TOP_AVERAGES: 'Toppmedelvärden'
 }

@@ -1,7 +1,5 @@
 <div class="score hatch">
-	<span class="score-name {{ score.classCss }}" data-ng-bind="score.name"></span>
-	@
-	<span class="score-realm" data-ng-bind="score.realm"></span>
+	<span class="score-name {{ score.classCss }}" data-ng-bind="score.name"></span>-<span class="score-realm" data-ng-bind="score.realm"></span>
 	<span class="score-presses pull-right" data-ng-bind="score.actualPresses + ' / ' + score.possiblePresses"></span>
 	<progressbar value="score.barValue" class="progress active">{{ score.value | number: 3 }}%</progressbar>
 </div>

@@ -96,12 +96,18 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
 	ApiService.clicks.get().$promise.then(function(response){
 		$scope.clicks = response.data.clicks;
 		$scope.totalClicks= response.data.totalClicks;
+		$scope.averages = response.data.averages;
+		$scope.totalAverage = response.data.totalAverage;
 		handleClicks($scope.clicks);
+		handleClicks($scope.averages);
 		setInterval(function(){
 			ApiService.clicks.get().$promise.then(function(response){
 				$scope.clicks = response.data.clicks;
 				$scope.totalClicks = response.data.totalClicks;
+				$scope.averages = response.data.averages;
+				$scope.totalAverage = response.data.totalAverage;
 				handleClicks($scope.clicks);
+				handleClicks($scope.averages);
 			});
 		}, 1000);
 	});
