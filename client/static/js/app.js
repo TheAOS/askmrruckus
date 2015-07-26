@@ -35,6 +35,14 @@ function getMinMax(scores){
 			max = scores[i].value;
 		}
 	}
+	min = min - 3;
+	max = max + 3;
+	if (min < 0) {
+		min = 0;
+	}
+	if (max > 100) {
+		max = 100;
+	}
 	return {min : min, max: max};
 }
 
