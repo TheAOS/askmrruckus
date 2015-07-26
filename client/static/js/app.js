@@ -24,10 +24,31 @@ function getType(value) {
 	return 'success';
 }
 
-function handleScores(scores) {
+function getMinMax(scores){
+	var min = 100;
+	var max = 0;
+	for(var i = 0; i < scores.length; i++) {
+		if (scores[i].value < min) {
+			min = scores[i].value;
+		}
+		if (scores[i].value > max) {
+			max = scores[i].value;
+		}
+	}
+	return {min : min, max: max};
+}
+
+function handleScores(scores, minMax, mode) {
+	if (!mode) {
+		mode = 'high';
+	}
 	for(var i = 0; i < scores.length; i++) {
 		scores[i].type = getType(scores[i].value);
 		scores[i].classCss = classDict[scores[i].class];
+		scores[i].barValue = (scores[i].value - minMax.min) / (minMax.max - minMax.min) * 100;
+		if (mode === 'low') {
+			scores[i].barValue = 100 - scores[i].barValue;
+		}
 	}
 }
 
@@ -37,7 +58,7 @@ function handleClicks(clicks) {
 	}
 }
 
-function updateScores(oldScores, newScores) {
+function updateScores(oldScores, newScores, minMax, mode) {
 	// Handle empty oldScores
 	if (oldScores.length == 0) {
 		oldScores.splice(0, 0, newScores);
@@ -56,7 +77,7 @@ function updateScores(oldScores, newScores) {
 		delete oldScores[oldScores.length - 1];
 		oldScores.length = oldScores.length - 1;
 	}
-	handleScores(oldScores);
+	handleScores(oldScores, minMax, mode);
 }
 
 angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
@@ -88,13 +109,17 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
 	// Init scores
 	ApiService.highscore.get().$promise.then(function(response){
 		$scope.scores = response.data;
-		handleScores($scope.scores.highscore);
-		handleScores($scope.scores.lowscore);
+		var minMaxHigh = getMinMax(response.data.highscore);
+		var minMaxLow = getMinMax(response.data.lowscore);
+		handleScores($scope.scores.highscore, minMaxHigh, 'high');
+		handleScores($scope.scores.lowscore, minMaxLow, 'low');
 		// Set score timer
 		setInterval(function(){
 			ApiService.highscore.get().$promise.then(function(response){
-				updateScores($scope.scores.highscore, response.data.highscore);
-				updateScores($scope.scores.lowscore, response.data.lowscore);
+				var minMaxHigh = getMinMax(response.data.highscore);
+				var minMaxLow = getMinMax(response.data.lowscore);
+				updateScores($scope.scores.highscore, response.data.highscore, minMaxHigh, 'high');
+				updateScores($scope.scores.lowscore, response.data.lowscore, minMaxLow, 'low');
 			});
 		}, 1000);
 	});

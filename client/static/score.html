@@ -3,5 +3,5 @@
 	@
 	<span class="score-realm" data-ng-bind="score.realm"></span>
 	<span class="score-presses pull-right" data-ng-bind="score.actualPresses + ' / ' + score.possiblePresses"></span>
-	<progressbar type="{{ score.type }}" value="score.value" class="progress active">{{ score.value | number: 3 }}%</progressbar>
+	<progressbar value="score.barValue" class="progress active">{{ score.value | number: 3 }}%</progressbar>
 </div>
