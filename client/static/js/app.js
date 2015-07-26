@@ -45,9 +45,11 @@ function handleScores(scores, minMax, mode) {
 	for(var i = 0; i < scores.length; i++) {
 		scores[i].type = getType(scores[i].value);
 		scores[i].classCss = classDict[scores[i].class];
-		scores[i].barValue = (scores[i].value - minMax.min) / (minMax.max - minMax.min) * 100;
+		if (mode === 'high') {
+			scores[i].barValue = (scores[i].value - minMax.min) / (100 - minMax.min) * 100;
+		}
 		if (mode === 'low') {
-			scores[i].barValue = 100 - scores[i].barValue;
+			scores[i].barValue = (minMax.max - scores[i].value) / (minMax.max) * 100;
 		}
 	}
 }
