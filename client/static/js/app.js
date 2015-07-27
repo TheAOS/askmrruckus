@@ -25,25 +25,25 @@ function getType(value) {
 }
 
 function getMinMax(scores){
-	var min = 100;
-	var max = 0;
-	for(var i = 0; i < scores.length; i++) {
-		if (scores[i].value < min) {
-			min = scores[i].value;
+	if (scores.length > 0) {
+		var min = scores[scores.length-1].value;
+		var max = scores[0].value;
+		if (min > max) {
+			var tmp = max;
+			max = min;
+			min = tmp;
 		}
-		if (scores[i].value > max) {
-			max = scores[i].value;
+		min = min - 1;
+		max = max + 1;
+		if (min < 0) {
+			min = 0;
 		}
+		if (max > 100) {
+			max = 100;
+		}
+		return {min : min, max: max};
 	}
-	min = min - 1;
-	max = max + 1;
-	if (min < 0) {
-		min = 0;
-	}
-	if (max > 100) {
-		max = 100;
-	}
-	return {min : min, max: max};
+	return {min: 0, max: 0};
 }
 
 function handleScores(scores, minMax, mode) {
