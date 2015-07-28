@@ -132,6 +132,16 @@ server.route({
 })
 
 server.route({
+	method : 'GET',
+	path : '/api/debug',
+	handler : function(request, reply) {
+		reply({
+			info: request.info
+		});
+	}
+})
+
+server.route({
 	method : 'POST',
 	path : '/api/optimize',
 	config : {
