@@ -136,6 +136,7 @@ server.route({
 	path : '/api/debug',
 	handler : function(request, reply) {
 		reply({
+			headers: request.headers,
 			info: request.info
 		});
 	}
