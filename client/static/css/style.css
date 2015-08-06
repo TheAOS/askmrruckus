@@ -7,3 +7,7 @@ score {
 .indent {
 	margin-left: 0px;
 }
+
+html.witing, html.waiting * {
+	cursor: wait !important;
+}

@@ -68,7 +68,7 @@ function handleClicks(clicks) {
 	}
 }
 
-function updateScores(oldScores, newScores, minMax, mode) {
+function updateScores(oldScores, newScores) {
 	// Handle empty oldScores
 	if (oldScores.length == 0) {
 		oldScores.splice(0, 0, newScores);
@@ -87,55 +87,90 @@ function updateScores(oldScores, newScores, minMax, mode) {
 		delete oldScores[oldScores.length - 1];
 		oldScores.length = oldScores.length - 1;
 	}
-	handleScores(oldScores, minMax, mode);
 }
 
-angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate'
+angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoad', 'ngCookies'
 ]).factory('ApiService', function($resource){
 	return {
 		siteprefs: $resource('/api/siteprefs'),
 		optimize: $resource('/api/optimize'),
 		retrieve: $resource('/api/retrieve'),
 		highscore: $resource('/api/highscore'),
-		clicks: $resource('/api/clicks')
+		clicks: $resource('/api/clicks'),
+		settings: $resource('/api/settings')
 	}
-}).controller('SiteCtrl', function($scope, ApiService){
-	$scope.strings = strings;
+}).controller('SiteCtrl', function($scope, ApiService, angularLoad){
+	ApiService.settings.get().$promise.then(function(response){
+		$scope.settings = response.data;
+		$scope.langCache = {};
+		var html = angular.element('html');
+		function setLanguage(lang){
+			if ($scope.langCache[lang]){
+				$scope.strings = $scope.langCache[lang];
+				$scope.lang = lang;
+				html.removeClass('waiting');
+			} else {
+				var promise = angularLoad.loadScript('/static/js/strings.'+lang+'.js')
+				html.addClass('waiting');
+				promise.then(function(){
+					console.log('fgh');
+					$scope.strings = strings;
+					$scope.lang = lang;
+					$scope.langCache[lang] = strings;
+					html.removeClass('waiting');
+				});
+			}
+		}
+		setLanguage($scope.settings.lang);
+		// public setLanguage
+		$scope.setLanguage = function(lang){
+			setLanguage(lang);
+		}
+		$scope.isActive = function(lang){
+			return lang == $scope.lang;
+		}
+	});
 }).controller('ClickCtrl', function($scope, ApiService){
-	// Init clicks
-	ApiService.clicks.get().$promise.then(function(response){
+	function refreshClicks(response){
 		$scope.clicks = response.data.clicks;
 		$scope.totalClicks= response.data.totalClicks;
 		$scope.averages = response.data.averages;
 		$scope.totalAverage = response.data.totalAverage;
 		handleClicks($scope.clicks);
 		handleClicks($scope.averages);
+	}
+	// Init clicks
+	ApiService.clicks.get().$promise.then(function(response){
+		refreshClicks(response);
 		setInterval(function(){
 			ApiService.clicks.get().$promise.then(function(response){
-				$scope.clicks = response.data.clicks;
-				$scope.totalClicks = response.data.totalClicks;
-				$scope.averages = response.data.averages;
-				$scope.totalAverage = response.data.totalAverage;
-				handleClicks($scope.clicks);
-				handleClicks($scope.averages);
+				refreshClicks(response);
 			});
 		}, 1000);
 	});
 }).controller('ScoreCtrl', function($scope, ApiService){
-	// Init scores
-	ApiService.highscore.get().$promise.then(function(response){
-		$scope.scores = response.data;
-		var minMaxHigh = getMinMax(response.data.highscore);
-		var minMaxLow = getMinMax(response.data.lowscore);
+	function refreshScores(scores){
+		// Get min and max values
+		var minMaxHigh = getMinMax(scores.highscore);
+		var minMaxLow = getMinMax(scores.lowscore);
+		// Set/update scope scores
+		if ($scope.scores){
+			updateScores($scope.scores.highscore, scores.highscore);
+			updateScores($scope.scores.lowscore, scores.lowscore);
+		} else {
+			$scope.scores = scores;
+		}
+		// Handle score css
 		handleScores($scope.scores.highscore, minMaxHigh, 'high');
 		handleScores($scope.scores.lowscore, minMaxLow, 'low');
-		// Set score timer
+	}
+	// Init scores
+	ApiService.highscore.get().$promise.then(function(response){
+		refreshScores(response.data);
+		// Set score load timer
 		setInterval(function(){
 			ApiService.highscore.get().$promise.then(function(response){
-				var minMaxHigh = getMinMax(response.data.highscore);
-				var minMaxLow = getMinMax(response.data.lowscore);
-				updateScores($scope.scores.highscore, response.data.highscore, minMaxHigh, 'high');
-				updateScores($scope.scores.lowscore, response.data.lowscore, minMaxLow, 'low');
+				refreshScores(response.data);
 			});
 		}, 1000);
 	});

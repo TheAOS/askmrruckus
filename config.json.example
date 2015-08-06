@@ -2,6 +2,7 @@
 	"site_title": "Ask Mr. Ruckus BETA",
 	"port": 8010,
 	"lang": "sv",
+	"available_lang" : ["en", "sv"],
 	"character_cache_timeout" : 60,
 	"bliz_locale" : "en_GB",
 	"bliz_region_url" : "https://eu.api.battle.net/",

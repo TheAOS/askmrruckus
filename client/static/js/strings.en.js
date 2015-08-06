@@ -1,0 +1,22 @@
+var strings = {
+		CHARACTER_NAME: 'Character name',
+		SERVER_NAME: 'Realm name',
+		TOO_SHORT: 'too short',
+		OPTIMIZATIONS_FOR: 'Optimizations for',
+		OUT_OF: 'out of',
+		POSSIBLE_BUTTONS_PRESSED: 'possible keys pressed',
+		OPTIMAL: 'optimal',
+		HIGHSCORES: 'Highscore',
+		LOWSCORES: 'Lowscore',
+		REOPTIMIZE: 'Re-optimize!',
+		LOAD_CHARACTER: 'Load character',
+		LOAD_TO_OPTIMIZE: 'Load a character to optimize!',
+		LOAD: 'Load!',
+		RESET: 'Reset',
+		TOTAL_CLICKS: 'Total clicks',
+		CLICKSCORES: 'Top clicks',
+		AVG_CLICK_VALUE: 'Average',
+		CLICKS: 'Clicks',
+		TOTAL_AVERAGE: 'Total average',
+		TOP_AVERAGES: 'Top averages'
+}

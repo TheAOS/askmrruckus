@@ -47,14 +47,6 @@ server.route({
 
 server.route({
 	method : 'GET',
-	path : '/js/strings.js',
-	handler : function(request, reply) {
-		reply.file('client/static/js/strings.' + config.lang + '.js');
-	}
-});
-
-server.route({
-	method : 'GET',
 	path : '/{path*}',
 	handler : function(request, reply) {
 		reply.redirect('/');
@@ -72,6 +64,27 @@ function getHighscores(){
 function getLowscores(){
 	return highscore.find({}, { limit: 10, sort: { value: 1 }});
 }
+
+function getRemoteAddress(request){
+	if (request.headers["x-real-ip"]) {
+		return request.headers["x-real-ip"];
+	} else {
+		return request.info.remoteAddress;
+	}
+}
+
+server.route({
+	method : 'GET',
+	path : '/api/settings',
+	handler : function(request, reply) {
+		reply({
+			data: {
+				lang: config.lang,
+				availableLang: config.available_lang
+			}
+		});
+	}
+});
 
 server.route({
 	method : 'POST',
@@ -129,18 +142,7 @@ server.route({
 		});
 		
 	}
-})
-
-server.route({
-	method : 'GET',
-	path : '/api/debug',
-	handler : function(request, reply) {
-		reply({
-			headers: request.headers,
-			info: request.info
-		});
-	}
-})
+});
 
 server.route({
 	method : 'POST',

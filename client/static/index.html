@@ -18,6 +18,11 @@
 			<div class="navbar-header">
 				<span class="navbar-brand" href="#">Ask Mr. Ruckus BETA</span>
 			</div>
+			<div id="navbar">
+				<ul class="nav navbar-nav navbar-right">
+					<li data-ng-repeat="lang in settings.availableLang" data-ng-class="{ active: isActive(lang) }"><a href="#" data-ng-bind="lang" data-ng-click="setLanguage(lang)"></a></li>
+				</ul>
+			</div>
 		</div>
 	</nav>
 	<div class="container ng-cloak">
@@ -27,20 +32,20 @@
 					<div class="panel-body">
 						<form name="characterForm">
 							<div class="form-group">
-								<label>{{ ::strings.CHARACTER_NAME }}:
-									<span class="text-danger" data-ng-if="characterForm.name.$error.minlength">({{ ::strings.TOO_SHORT }})</span>
+								<label>{{ strings.CHARACTER_NAME }}:
+									<span class="text-danger" data-ng-if="characterForm.name.$error.minlength">({{ strings.TOO_SHORT }})</span>
 								</label>
 								<input type="text" data-ng-minlength="3" data-ng-required="true" name="name"
 									data-ng-model="character.name" class="form-control" autocomplete="off" autofocus="autofocus">
 							</div>
 							<div class="form-group">
-								<label>{{ ::strings.SERVER_NAME }}:
-									<span class="text-danger" data-ng-if="characterForm.realm.$error.minlength">({{ ::strings.TOO_SHORT }})</span>
+								<label>{{ strings.SERVER_NAME }}:
+									<span class="text-danger" data-ng-if="characterForm.realm.$error.minlength">({{ strings.TOO_SHORT }})</span>
 								</label>
 								<input type="text" data-ng-minlength="3" data-ng-required="true" name="realm"
 									data-ng-model="character.realm" class="form-control" autocomplete="off" autofocus="autofocus">
 							</div>
-							<button data-ng-disabled="characterForm.$invalid || !retrieveEnabled" data-ng-click="retrieve(character)" class="btn btn-primary">{{ ::strings.LOAD }}</button>
+							<button data-ng-disabled="characterForm.$invalid || !retrieveEnabled" data-ng-click="retrieve(character)" class="btn btn-primary">{{ strings.LOAD }}</button>
 							<span class="text-danger" data-ng-bind="errorMsg"></span>
 						</form>
 					</div>
@@ -50,23 +55,23 @@
 				<div class="panel panel-default">
 					<div class="panel-body">
 						<h3>
-							{{ ::strings.OPTIMIZATIONS_FOR }}
+							{{ strings.OPTIMIZATIONS_FOR }}
 							<span class="{{ classCss }}" data-ng-bind="loadedCharacter.name"></span>
 							@
 							<span data-ng-bind="loadedCharacter.realm"></span>
 						</h3>
 						<div data-ng-if="optimized">
 							<p>
-								<span data-ng-bind="optimized.actualPresses"></span> {{ ::strings.OUT_OF }}
-								<span data-ng-bind="optimized.possiblePresses"></span> {{ ::strings.POSSIBLE_BUTTONS_PRESSED }}.
+								<span data-ng-bind="optimized.actualPresses"></span> {{ strings.OUT_OF }}
+								<span data-ng-bind="optimized.possiblePresses"></span> {{ strings.POSSIBLE_BUTTONS_PRESSED }}.
 							</p>
 							<p>
-								<span data-ng-bind="(optimized.value | number: 3) + '%'"></span> {{ ::strings.OPTIMAL }}.
+								<span data-ng-bind="(optimized.value | number: 3) + '%'"></span> {{ strings.OPTIMAL }}.
 							</p>
 							<progressbar type="info" value="optimized.value" class="progress-striped active"></progressbar>
 						</div>
-						<button data-ng-disabled="!optimizeEnabled" data-ng-click="optimize(loadedCharacter)" class="btn btn-primary">{{ ::strings.REOPTIMIZE }}</button>
-						<button data-ng-disabled="!optimizeEnabled" data-ng-click="reset()" class="btn btn-primary">{{ ::strings.RESET }}</button>
+						<button data-ng-disabled="!optimizeEnabled" data-ng-click="optimize(loadedCharacter)" class="btn btn-primary">{{ strings.REOPTIMIZE }}</button>
+						<button data-ng-disabled="!optimizeEnabled" data-ng-click="reset()" class="btn btn-primary">{{ strings.RESET }}</button>
 					</div>
 				</div>
 			</div>
@@ -75,7 +80,7 @@
 			<div class="col-sm-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<span data-ng-bind="::strings.HIGHSCORES"></span>
+						<span data-ng-bind="strings.HIGHSCORES"></span>
 					</div>
 					<div class="panel-body">
 						<span><scorelist scores="scores.highscore"></scorelist>
@@ -85,7 +90,7 @@
 			<div class="col-sm-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<span data-ng-bind="::strings.LOWSCORES"></span>
+						<span data-ng-bind="strings.LOWSCORES"></span>
 					</div>
 					<div class="panel-body">
 						<scorelist scores="scores.lowscore"></scorelist>
@@ -97,7 +102,7 @@
 					<div class="col-xs-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<span data-ng-bind="::strings.CLICKSCORES"></span>
+								<span data-ng-bind="strings.CLICKSCORES"></span>
 							</div>
 							<div class="panel-body">
 								<div class="clicks">
@@ -112,7 +117,7 @@
 								</div>
 							</div>
 							<div class="panel-footer">
-								<span data-ng-bind="::strings.TOTAL_CLICKS"></span>:
+								<span data-ng-bind="strings.TOTAL_CLICKS"></span>:
 								<span data-ng-bind="totalClicks"></span>
 							</div>
 						</div>
@@ -122,7 +127,7 @@
 					<div class="col-xs-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<span data-ng-bind="::strings.TOP_AVERAGES"></span>
+								<span data-ng-bind="strings.TOP_AVERAGES"></span>
 							</div>
 							<div class="panel-body">
 								<div class="clicks">
@@ -137,7 +142,7 @@
 								</div>
 							</div>
 							<div class="panel-footer">
-								<span data-ng-bind="::strings.TOTAL_AVERAGE"></span>:
+								<span data-ng-bind="strings.TOTAL_AVERAGE"></span>:
 								<span data-ng-bind="totalAverage | number: 3"></span>%
 							</div>
 						</div>
@@ -146,11 +151,13 @@
 			</div>
 		</div>
 	</div>
+	<script src="static/external/js/jquery-2.1.4.js"></script>
 	<script src="static/external/js/angular-1.4.3.js"></script>
 	<script src="static/external/js/angular-resource-1.4.3.js"></script>
 	<script src="static/external/js/angular-animate-1.4.3.js"></script>
+	<script src="static/external/js/angular-cookies-1.4.3.js"></script>
+	<script src="static/external/js/angular-load-0.2.0.js"></script>
 	<script src="static/external/js/ui-bootstrap-tpls-0.13.0.js"></script>
-	<script src="js/strings.js"></script>
 	<script src="static/js/app.js"></script>
 </body>
 </html>
