@@ -99,29 +99,38 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 		clicks: $resource('/api/clicks'),
 		settings: $resource('/api/settings')
 	}
-}).controller('SiteCtrl', function($scope, ApiService, angularLoad){
+}).controller('SiteCtrl', function($scope, $cookies, ApiService, angularLoad){
 	ApiService.settings.get().$promise.then(function(response){
 		$scope.settings = response.data;
 		$scope.langCache = {};
 		var html = angular.element('html');
+		var content = angular.element('#content');
 		function setLanguage(lang){
-			if ($scope.langCache[lang]){
+			function set(lang){
 				$scope.strings = $scope.langCache[lang];
 				$scope.lang = lang;
-				html.removeClass('waiting');
+				$cookies.put('lang', lang);
+			}
+			if ($scope.langCache[lang]){
+				set(lang);
 			} else {
 				var promise = angularLoad.loadScript('/static/js/strings.'+lang+'.js')
 				html.addClass('waiting');
 				promise.then(function(){
-					console.log('fgh');
-					$scope.strings = strings;
-					$scope.lang = lang;
 					$scope.langCache[lang] = strings;
+					set(lang);
 					html.removeClass('waiting');
+					content.removeClass('lang-hide');
 				});
 			}
 		}
-		setLanguage($scope.settings.lang);
+		var cookieValue = $cookies.get('lang');
+		// Init
+		if (cookieValue) {
+			setLanguage(cookieValue);
+		} else {
+			setLanguage($scope.settings.lang);
+		}
 		// public setLanguage
 		$scope.setLanguage = function(lang){
 			setLanguage(lang);

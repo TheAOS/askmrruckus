@@ -4,6 +4,8 @@ score {
 
 .ng-cloak { display:none; }
 
+#content.lang-hide { display: none; }
+
 .indent {
 	margin-left: 0px;
 }
