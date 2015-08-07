@@ -99,9 +99,11 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 		clicks: $resource('/api/clicks'),
 		settings: $resource('/api/settings')
 	}
-}).controller('SiteCtrl', function($scope, $cookies, ApiService, angularLoad){
+}).controller('SiteCtrl', function($scope, $rootScope, $cookies, ApiService, angularLoad){
 	ApiService.settings.get().$promise.then(function(response){
-		$scope.settings = response.data;
+		// SETTINGS
+		$rootScope.settings = response.data;
+		// LANGUAGE
 		$scope.langCache = {};
 		var html = angular.element('html');
 		var content = angular.element('#content');
@@ -129,7 +131,7 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 		if (cookieValue) {
 			setLanguage(cookieValue);
 		} else {
-			setLanguage($scope.settings.lang);
+			setLanguage($rootScope.settings.lang);
 		}
 		// public setLanguage
 		$scope.setLanguage = function(lang){
@@ -139,7 +141,7 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 			return lang == $scope.lang;
 		}
 	});
-}).controller('ClickCtrl', function($scope, ApiService){
+}).controller('ClickCtrl', function($scope, $interval, ApiService){
 	function refreshClicks(response){
 		$scope.clicks = response.data.clicks;
 		$scope.totalClicks= response.data.totalClicks;
@@ -151,13 +153,13 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 	// Init clicks
 	ApiService.clicks.get().$promise.then(function(response){
 		refreshClicks(response);
-		setInterval(function(){
+		$interval(function(){
 			ApiService.clicks.get().$promise.then(function(response){
 				refreshClicks(response);
 			});
 		}, 1000);
 	});
-}).controller('ScoreCtrl', function($scope, ApiService){
+}).controller('ScoreCtrl', function($scope, $interval, ApiService){
 	function refreshScores(scores){
 		// Get min and max values
 		var minMaxHigh = getMinMax(scores.highscore);
@@ -177,13 +179,13 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 	ApiService.highscore.get().$promise.then(function(response){
 		refreshScores(response.data);
 		// Set score load timer
-		setInterval(function(){
+		$interval(function(){
 			ApiService.highscore.get().$promise.then(function(response){
 				refreshScores(response.data);
 			});
 		}, 1000);
 	});
-}).controller('OptimizeCtrl', function($scope, ApiService){
+}).controller('OptimizeCtrl', function($scope, $rootScope, $timeout, ApiService){
 	$scope.optimizeEnabled = true;
 	$scope.retrieveEnabled = true;
 	// Optimize function
@@ -199,7 +201,7 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 					$scope.optimize($scope.loadedCharacter, true);
 					$scope.errorMsg = null;
 				}
-				setTimeout(function(){
+				$timeout(function(){
 					$scope.retrieveEnabled = true;
 				}, 1000);
 			});
@@ -218,11 +220,11 @@ angular.module('ruckus', ['ui.bootstrap', 'ngResource', 'ngAnimate', 'angularLoa
 				$scope.optimized.possiblePresses = response.data.possiblePresses;
 				$scope.optimized.actualPresses = response.data.actualPresses;
 				$scope.optimized.value = response.data.value;
-				// Reenable button after 0.5 sec
+				// Reenable button after x sec
 				if (!override){
-					setTimeout(function(){
+					$timeout(function(){
 						$scope.optimizeEnabled = true;
-					}, 500);
+					}, $rootScope.settings.clickTimer);
 				}
 			});
 		}

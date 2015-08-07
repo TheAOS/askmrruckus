@@ -80,7 +80,8 @@ server.route({
 		reply({
 			data: {
 				lang: config.lang,
-				availableLang: config.available_lang
+				availableLang: config.available_lang,
+				clickTimer: config.click_timer
 			}
 		});
 	}
@@ -99,14 +100,14 @@ server.route({
 	},
 	handler : function(request, reply) {
 		// Find in cache, if not too old
-		var characterPromise = characterCache.findOne({name: request.payload.name, realm: request.payload.server}, 'name realm class lastGet');
+		var characterPromise = characterCache.findOne({name: request.payload.name, realm: request.payload.realm}, 'name realm class lastGet');
 		
 		characterPromise.on('complete', function(err, character){
 			if (!err && character) {
-				console.log(character);
 				if (((new Date) - character.lastGet) < config.character_cache_timeout * 60 * 1000){
 					// Character cache is not expired
 					delete character.lastGet;
+					delete character._id;
 					reply({data: character});
 					return
 				} else {
@@ -158,16 +159,29 @@ server.route({
 	},
 	handler : function(request, reply) {
 		var character = request.payload;
-		character.possiblePresses = getRandomInt(10000, 100000);
-		character.actualPresses = getRandomInt(0, character.possiblePresses + 1);
-		character.value = character.actualPresses/character.possiblePresses * 100;
-		character.date = new Date();
-		
-		highscore.insert(character).then(function(){
-			reply({
-				data: character
-			});
-		}, console.error);
+				
+		highscore.findOne({name: character.name, realm: character.realm}, {sort: {date: -1}}).on('complete', function(err, char){
+			console.log(char);
+			if (!err) {
+				character.possiblePresses = getRandomInt(10000, 100000);
+				character.actualPresses = getRandomInt(0, character.possiblePresses + 1);
+				character.value = character.actualPresses/character.possiblePresses * 100;
+				character.date = new Date();
+				if (char) {
+					if (((new Date()) - char.date) > config.click_timer){
+						highscore.insert(character);
+						reply({ data: character });
+					} else {
+						delete char.date;
+						delete char._id;
+						reply({ data: char});
+					}
+				} else {
+					highscore.insert(character);
+					reply({ data: character });
+				}
+			}
+		});
 	}
 });
 
