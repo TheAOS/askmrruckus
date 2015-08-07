@@ -161,7 +161,6 @@ server.route({
 		var character = request.payload;
 				
 		highscore.findOne({name: character.name, realm: character.realm}, {sort: {date: -1}}).on('complete', function(err, char){
-			console.log(char);
 			if (!err) {
 				character.possiblePresses = getRandomInt(10000, 100000);
 				character.actualPresses = getRandomInt(0, character.possiblePresses + 1);
